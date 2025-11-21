@@ -10,6 +10,11 @@ const fileReducer = (state, action) => {
         ...state,
         file: [...state.file, action.payload.data],
       };
+    case "SET_FILE_LIST":
+      return {
+        ...state,
+        file: action.payload,
+      };
     case "SET_LOADING":
       return {
         ...state,

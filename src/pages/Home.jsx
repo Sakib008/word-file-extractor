@@ -1,12 +1,24 @@
 import api from "../utils/api";
 import { useFileContext } from "../context/fileContext.jsx";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Home = () => {
-  const { state, dispatch } = useFileContext();
+  const { state, dispatch, getFileList } = useFileContext();
   const [selectedFile, setFile] = useState(null);
   const { loading } = state;
+  useEffect(() => {
+    dispatch({ type: "SET_LOADING", payload: true });
+    try {
+      if (state.file.length === 0) {
+        getFileList();
+      }
+    } catch (error) {
+      console.error("Error : ", error);
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false });
+    }
+  }, []);
   const handleChange = (e) => {
     try {
       e.preventDefault();
@@ -42,7 +54,8 @@ const Home = () => {
       setFile(null);
     }
   };
-console.log("state : ", state);
+
+  console.log("state : ", state.file);
   return (
     <div className="max-w-7xl mx-auto flex flex-col justify-center items-center">
       <div>
